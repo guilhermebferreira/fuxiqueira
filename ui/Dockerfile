@@ -2,12 +2,13 @@
 FROM node:current-alpine
 
 # setup work directory
-WORKDIR /app
+WORKDIR /app/ui
 
-ENV PATH /app/node_modules/.bin:$PATH
+ENV PATH /app/ui/node_modules/.bin:$PATH
 
 # install dependencies
-COPY package.json /app/package.json
+COPY package.json /app/ui/package.json
+
 RUN npm install
 RUN npm install -g @vue/cli
 
