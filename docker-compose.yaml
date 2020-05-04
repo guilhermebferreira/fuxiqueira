@@ -49,16 +49,16 @@ services:
         networks:
           - fuxiqueira_network
     webapp-ui:
-        restart: always
-        container_name: fuxiqueira-ui
+        container_name: fuxiqueira-web
         build:
             context: ./ui
             dockerfile: Dockerfile
         volumes:
-            - ".:/app"
-            - "/app/ui/node_modules"
+          - ./ui:/home/node/app
+          - /usr/app/node_modules
+        command: sh -c 'yarn && yarn serve'
         ports:
-            - "8081:8080"
+          - "8081:8080"
         networks:
           - fuxiqueira_network
 

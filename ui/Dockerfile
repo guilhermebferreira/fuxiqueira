@@ -1,16 +1,18 @@
-# nodejs base image
-FROM node:current-alpine
+FROM node:12-alpine
 
-# setup work directory
-WORKDIR /app/ui
+WORKDIR /usr/src/app
 
-ENV PATH /app/ui/node_modules/.bin:$PATH
+COPY package.json yarn.lock ./
 
 # install dependencies
-COPY package.json /app/ui/package.json
+RUN yarn install
 
-RUN npm install
-RUN npm install -g @vue/cli
+COPY . .
 
-# start app
-CMD ["npm", "run", "serve"]
+# build application
+RUN yarn build
+
+#EXPOSE 3030
+EXPOSE 8080
+
+CMD [ "node", "./dist/Main.js" ]
