@@ -9,10 +9,4 @@ RUN yarn install
 
 COPY . .
 
-# build application
-RUN yarn build
-
-#EXPOSE 3030
 EXPOSE 8080
-
-CMD [ "node", "./dist/Main.js" ]
