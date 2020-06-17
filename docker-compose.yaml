@@ -54,7 +54,7 @@ services:
             context: ./ui
             dockerfile: Dockerfile
         volumes:
-          - ./ui:/home/node/app
+          - ./ui:/home/node/app:cached
           - /usr/app/node_modules
         command: sh -c 'yarn && yarn serve'
         ports:
