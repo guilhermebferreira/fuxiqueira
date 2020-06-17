@@ -42,76 +42,89 @@
           <v-progress-linear value="15"></v-progress-linear>
         </template>
 
-        <v-carousel
-          :continuous=false
-          hide-delimiter-background
-          show-arrows-on-hover
-        >
+        <v-row
+          height="100%">
+          <v-col>
 
-          <v-carousel-item
-            v-for="(questao, i) in questoes"
-            :key="i"
-          >
 
-            <v-card
-              class="mx-auto"
-              max-width="400"
-
-              light
+            <v-carousel
+              :continuous=false
+              :show-arrows=false
+              height="100%"
+              hide-delimiter-background
+              v-model="model"
             >
-              <v-img
-                class="white--text align-end"
-                height="200px"
-                src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+
+              <v-carousel-item
+                :key="i"
+                v-for="(questao, i) in questoes"
               >
-                <v-card-title>Top 10 Australian beaches</v-card-title>
-              </v-img>
 
-              <v-card-subtitle class="pb-0">Number 10</v-card-subtitle>
+                <v-card
+                  class="mx-auto"
+                  light
 
-              <v-card-text class="text--primary">
-                <v-container fluid>
-                  <p>{{ radios || 'null' }}</p>
-                  {{ i }}
-                  <v-radio-group :mandatory="false" v-model="radios">
-                    <v-radio label="Radio 1" value="radio-1"></v-radio>
-                    <v-radio label="Radio 2" value="radio-2"></v-radio>
-                  </v-radio-group>
-                </v-container>
-                <v-btn
-                  color="orange"
-                  text
-                  @click="$emit('input', i+1)"
+                  max-width="400"
                 >
-                  Enviar
-                </v-btn>
-                <v-btn
-                  color="orange"
-                  text
-                  @click="$emit('next')"
-                >
-                  next
-                </v-btn>
-              </v-card-text>
+                  <v-img
+                    class="white--text align-end"
+                    height="200px"
+                    src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+                  >
+                    <v-card-title>{{ questao.titulo }}</v-card-title>
+                  </v-img>
 
-              <v-card-actions>
+                  <v-card-text class="text--primary">
+                    <v-container fluid>
+                      <p>{{ questao.descricao }}</p>
+                      <p>{{radios }}</p>
 
-                teste
-                <v-btn
-                  color="orange"
-                  @click="nextItem"
-                >
-                  Enviar
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-carousel-item>
-        </v-carousel>
 
-      </v-container>
-      <v-container>
+                      <v-container>
+                        <vuetify-audio :ended="audioFinish" :file="file"></vuetify-audio>
+                      </v-container>
 
-        <vuetify-audio :ended="audioFinish" :file="file"></vuetify-audio>
+                      <v-radio-group :mandatory="false" v-model="radios">
+
+                        <template
+                          v-for="(alternativa, j) in questao.alternativas"
+                        >
+                          <v-radio
+                            :key="j"
+                            :label=alternativa.descricao
+                            :value=alternativa.descricao
+                          />
+                        </template>
+
+                      </v-radio-group>
+                    </v-container>
+                  </v-card-text>
+
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      @click="nextItem"
+                      color="orange"
+                    >
+                      nextItem
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+
+
+              </v-carousel-item>
+            </v-carousel>
+          </v-col>
+          <v-col>
+
+            <v-container>
+
+              <vuetify-audio :ended="audioFinish" :file="file"></vuetify-audio>
+            </v-container>
+          </v-col>
+        </v-row>
+
+
       </v-container>
 
 
@@ -142,6 +155,8 @@ export default {
     },
   },
   data: () => ({
+    model: 0,
+    arrows: false,
     drawer: null,
     radios: '',
     file: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3',
@@ -217,7 +232,11 @@ export default {
     },
     nextItem() {
       console.log('next');
-      this.$emit('change', 1);
+      this.model += 1;
+    },
+    showHideArrows() {
+      this.arrows = !this.arrows;
+      console.log(this.arrows);
     },
   },
 };
