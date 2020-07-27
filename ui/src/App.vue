@@ -10,7 +10,7 @@
             <v-icon>mdi-home</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Home</v-list-item-title>
+            <v-list-item-title>Realizar Teste</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item link>
@@ -18,7 +18,7 @@
             <v-icon>mdi-contact-mail</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title>Contact</v-list-item-title>
+            <v-list-item-title>Contato</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -30,7 +30,7 @@
       dark
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"/>
-      <v-toolbar-title>Teste</v-toolbar-title>
+      <v-toolbar-title>Fuxiqueira</v-toolbar-title>
     </v-app-bar>
 
     <v-content>
@@ -69,13 +69,21 @@
                   <v-img
                     class="white--text align-end"
                     height="200px"
-                    src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+                    src="@/assets/img/3mixirica1.jpeg"
                   >
-                    <v-card-title>{{ questao.titulo }}</v-card-title>
+                    <v-card-title class="black--text">{{ questao.titulo }}</v-card-title>
                   </v-img>
+                  <audio src="@/assets/audio/16a.mp3"></audio>
 
                   <v-card-text class="text--primary">
                     <v-container fluid>
+                      <v-btn
+                        @click="play"
+                        color="orange"
+                      >
+                        Play
+                      </v-btn>
+
                       <p>{{ questao.descricao }}</p>
                       <p>{{radios }}</p>
 
@@ -106,7 +114,7 @@
                       @click="nextItem"
                       color="orange"
                     >
-                      nextItem
+                      Proxima
                     </v-btn>
                   </v-card-actions>
                 </v-card>
@@ -114,13 +122,6 @@
 
               </v-carousel-item>
             </v-carousel>
-          </v-col>
-          <v-col>
-
-            <v-container>
-
-              <vuetify-audio :ended="audioFinish" :file="file"></vuetify-audio>
-            </v-container>
           </v-col>
         </v-row>
 
@@ -154,12 +155,16 @@ export default {
       return 0;
     },
   },
+  mounted() {
+    // this.sound = new Audio(require('@/assets/audio/16a.mp3'));
+  },
   data: () => ({
     model: 0,
     arrows: false,
     drawer: null,
     radios: '',
-    file: 'http://www.noiseaddicts.com/samples_1w72b820/290.mp3',
+    sound: {},
+    file: './assets/audio/16a.mp3',
     colors: [
       'indigo',
       'warning',
@@ -174,20 +179,96 @@ export default {
       'Fourth',
       'Fifth',
     ],
+
+
     questoes: [
       {
-        titulo: 'Questao 1',
-        descricao: 'Descricao da questão 1',
-        alternativas: [
-          {
-            descricao: 'Opção A',
-          },
-          {
-            descricao: 'Opção B',
-          },
-          {
-            descricao: 'Opção C',
-          },
+        titulo: 'Questao 3',
+        descricao: 'Independente da variedade, qual o nome das frutas das fotos?',
+        alternativas: [{
+          letra: 'a',
+          descricao: '﻿Mimosa',
+        },
+
+        {
+          letra: 'b',
+          descricao: 'Tanja',
+        },
+
+        {
+          letra: 'c',
+          descricao: 'Mexerica / Mixirica',
+        },
+
+        {
+          letra: 'd',
+          descricao: 'Poncã / Ponkã',
+        },
+
+        {
+          letra: 'e',
+          descricao: 'Pocã / Pokan',
+        },
+
+        {
+          letra: 'f',
+          descricao: 'Tangerina',
+        },
+
+        {
+          letra: 'g',
+          descricao: 'Bergamota / Vergamota',
+        },
+
+        {
+          letra: 'h',
+          descricao: 'Laranja-cravo',
+        },
+
+        {
+          letra: 'i',
+          descricao: 'Laranja-crava',
+        },
+
+        {
+          letra: 'j',
+          descricao: 'Mangota (Mangote, Mongote, Margota)',
+        },
+
+        {
+          letra: 'k',
+          descricao: 'Morgota',
+        },
+
+        {
+          letra: 'l',
+          descricao: 'Fuxiqueira',
+        },
+
+        {
+          letra: 'm',
+          descricao: 'Mandarina',
+        },
+
+        {
+          letra: 'n',
+          descricao: 'Carioquinha',
+        },
+
+        {
+          letra: 'o',
+          descricao: 'Maricota/Maricote',
+        },
+
+        {
+          letra: 'p',
+          descricao: 'Muricota/Moricota (Muricote, Morocota, Morocote)',
+        },
+
+        {
+          letra: 'q',
+          descricao: 'Murcote/Morcote (Marcota, Morcota, Mucote)',
+        },
         ],
       },
       {
@@ -227,6 +308,9 @@ export default {
   }),
 
   methods: {
+    play() {
+      // this.audio.play();
+    },
     audioFinish() {
       console.log('You see this means audio finish.');
     },
