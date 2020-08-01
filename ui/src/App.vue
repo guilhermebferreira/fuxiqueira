@@ -50,7 +50,10 @@
             <v-carousel
               :continuous=false
               :show-arrows=false
+              :progress=false
+              :cycle=false
               height="100%"
+              hide-delimiters
               hide-delimiter-background
               v-model="model"
             >
@@ -60,64 +63,15 @@
                 v-for="(questao, i) in questoes"
               >
 
-                <v-card
-                  class="mx-auto"
-                  light
+                <questao
+                  :titulo="questao.titulo"
+                  :descricao="questao.descricao"
+                  :alternativas="questao.alternativas"
+                  :imagem="questao.imagem"
+                  :audio="questao.audio"
+                  v-bind:responder="addResposta"
 
-                  max-width="400"
-                >
-                  <v-img
-                    class="white--text align-end"
-                    height="200px"
-                    src="@/assets/img/3mixirica1.jpeg"
-                  >
-                    <v-card-title class="black--text">{{ questao.titulo }}</v-card-title>
-                  </v-img>
-                  <audio src="@/assets/audio/16a.mp3"></audio>
-
-                  <v-card-text class="text--primary">
-                    <v-container fluid>
-                      <v-btn
-                        @click="play"
-                        color="orange"
-                      >
-                        Play
-                      </v-btn>
-
-                      <p>{{ questao.descricao }}</p>
-                      <p>{{radios }}</p>
-
-
-                      <v-container>
-                        <vuetify-audio :ended="audioFinish" :file="file"></vuetify-audio>
-                      </v-container>
-
-                      <v-radio-group :mandatory="false" v-model="radios">
-
-                        <template
-                          v-for="(alternativa, j) in questao.alternativas"
-                        >
-                          <v-radio
-                            :key="j"
-                            :label=alternativa.descricao
-                            :value=alternativa.descricao
-                          />
-                        </template>
-
-                      </v-radio-group>
-                    </v-container>
-                  </v-card-text>
-
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                      @click="nextItem"
-                      color="orange"
-                    >
-                      Proxima
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
+                ></questao>
 
 
               </v-carousel-item>
@@ -140,7 +94,10 @@
 </template>
 
 <script>
-import VuetifyAudio from 'vuetify-audio';
+
+import mp3file16b from '@/assets/audio/16b.mp3';
+import mixirica1 from '@/assets/img/3mixirica1.jpeg';
+import Questao from '@/components/Questao.vue';
 
 export default {
   props: {
@@ -148,7 +105,7 @@ export default {
   },
 
   components: {
-    'vuetify-audio': VuetifyAudio,
+    questao: Questao,
   },
   computed: {
     active() {
@@ -156,15 +113,11 @@ export default {
     },
   },
   mounted() {
-    // this.sound = new Audio(require('@/assets/audio/16a.mp3'));
   },
   data: () => ({
     model: 0,
-    arrows: false,
     drawer: null,
-    radios: '',
-    sound: {},
-    file: './assets/audio/16a.mp3',
+    respostas: [],
     colors: [
       'indigo',
       'warning',
@@ -172,19 +125,14 @@ export default {
       'red lighten-1',
       'deep-purple accent-4',
     ],
-    slides: [
-      'First',
-      'Second',
-      'Third',
-      'Fourth',
-      'Fifth',
-    ],
 
 
     questoes: [
       {
         titulo: 'Questao 3',
         descricao: 'Independente da variedade, qual o nome das frutas das fotos?',
+        imagem: mixirica1,
+        audio: mp3file16b,
         alternativas: [{
           letra: 'a',
           descricao: '﻿Mimosa',
@@ -276,12 +224,15 @@ export default {
         descricao: 'Descricao da questão 2',
         alternativas: [
           {
+            letra: 'q',
             descricao: 'Opção A',
           },
           {
+            letra: 'q',
             descricao: 'Opção B',
           },
           {
+            letra: 'q',
             descricao: 'Opção C',
           },
         ],
@@ -291,36 +242,35 @@ export default {
         descricao: 'Descricao da questão 3',
         alternativas: [
           {
+
+            letra: 'q',
             descricao: 'Opção A',
           },
           {
+            letra: 'q',
             descricao: 'Opção B',
           },
           {
+            letra: 'q',
             descricao: 'Opção C',
           },
           {
+            letra: 'q',
             descricao: 'Opção D',
           },
         ],
       },
     ],
   }),
-
   methods: {
-    play() {
-      // this.audio.play();
-    },
-    audioFinish() {
-      console.log('You see this means audio finish.');
+    addResposta(resp) {
+      this.respostas.push(resp);
+      console.log(this.respostas);
+      this.nextItem();
     },
     nextItem() {
       console.log('next');
       this.model += 1;
-    },
-    showHideArrows() {
-      this.arrows = !this.arrows;
-      console.log(this.arrows);
     },
   },
 };
