@@ -1,0 +1,68 @@
+version: "3.5"
+
+services:
+
+    database-service:
+        healthcheck:
+          test: ["CMD-SHELL", "pg_isready -U fuxiqueira -d fuxiqueira || exit 1"]
+          interval: 10s
+          timeout: 5s
+          retries: 3
+        image: postgres:10
+        container_name: fuxiqueira-database
+        environment:
+          - POSTGRES_PASSWORD=fuxiqueira
+          - POSTGRES_USER=fuxiqueira
+          - POSTGRES_DB=fuxiqueira
+          - POSTGRES_DB_TEST=fuxiqueira-test
+        ports:
+          - "5433:5432"
+        expose:
+          - "5432"
+        volumes:
+          - ./database/docker-data/postgres:/var/lib/postgresql/data
+          - ./database:/docker-entrypoint-initdb.d
+        networks:
+          - fuxiqueira_network
+    webapp-api:
+        restart: on-failure
+        build:
+            context: ./api
+            dockerfile: Dockerfile
+        container_name: fuxiqueira-api
+        command: python manage.py runserver 0.0.0.0:8000
+        depends_on:
+          - database-service
+        volumes:
+            - ./api:/django
+        ports:
+            - "8010:8000"
+        links:
+            - database-service
+        environment:
+            DEBUG: "true"
+            DATABASE_NAME: fuxiqueira 
+            DATABASE_USER: fuxiqueira
+            DATABASE_PASSWORD: fuxiqueira
+            DATABASE_SERVICE_HOST: fuxiqueira-database
+
+        networks:
+          - fuxiqueira_network
+    webapp-ui:
+        container_name: fuxiqueira-web
+        build:
+            context: ./ui
+            dockerfile: Dockerfile
+        volumes:
+          - ./ui:/home/node/app:cached
+          - /usr/app/node_modules
+        command: sh -c 'yarn && yarn serve'
+        ports:
+          - "8081:8080"
+        networks:
+          - fuxiqueira_network
+
+networks:
+  fuxiqueira_network:
+    name: fuxiqueira_network
+    driver: bridge
